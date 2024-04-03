@@ -1,5 +1,7 @@
 const alunos = require("../dados/alunos");
 
+let idProximoAluno = 1
+
 const listarAlunos = (req, res) =>{
     res.json(alunos)
 };
@@ -22,7 +24,42 @@ const obterAlunoPorId = (req, res)=>{
     res.json(aluno)
 }
 
+const cadastrarAluno = (req,res)=>{
+    const {nome, sobrenome, idade, curso} = req.body;
+
+    if(!nome) {
+        return res.status(400).json({mensagem : "O nome deve ser informado."});    
+    }
+
+    if(!sobrenome) {
+        return res.status(400).json({mensagem : "O sobrenome deve ser informado."});    
+    }
+
+    if(!idade) {
+        return res.status(400).json({mensagem : "A idade deve ser informada."});    
+    }
+
+    if(!curso) {
+        return res.status(400).json({mensagem : "O curso deve ser informado."});    
+    }
+
+    const novoAluno = {
+        id : idProximoAluno,
+        nome,
+        sobrenome,
+        idade,
+        curso
+    }
+
+    alunos.push(novoAluno);
+    
+    idProximoAluno++
+
+    res.status(201).send()
+};
+
 module.exports = {
     listarAlunos,
-    obterAlunoPorId
+    obterAlunoPorId,
+    cadastrarAluno
 } 
