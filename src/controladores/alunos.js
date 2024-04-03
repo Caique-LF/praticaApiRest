@@ -18,7 +18,7 @@ const obterAlunoPorId = (req, res)=>{
     })
 
     if(!aluno){
-        return res.status(400).json({mensagem: 'Aluno não encontrado'})
+        return res.status(404).json({mensagem: 'Aluno não encontrado'})
     };
 
     res.json(aluno)
@@ -58,8 +58,30 @@ const cadastrarAluno = (req,res)=>{
     res.status(201).send()
 };
 
+const excluirAluno = (req, res)=> {
+    const idRequisitado = Number(req.params.id)
+
+    if(isNaN(idRequisitado)){
+        return res.status(400).json({mensagem : "O id informado não é um numero"});
+    }
+
+    const indiceAlunoExclusão= alunos.findIndex((aluno)=>{
+       return aluno.id === idRequisitado;
+    })
+
+    if(indiceAlunoExclusão <0){
+        return res.status(404).json({mensagem: 'Aluno não encontrado'})
+    };
+
+    const alunoExcluido = alunos.splice(indiceAlunoExclusão, 1)[0];
+
+    return res.json(alunoExcluido);
+
+}
+
 module.exports = {
     listarAlunos,
     obterAlunoPorId,
-    cadastrarAluno
+    cadastrarAluno,
+    excluirAluno
 } 
